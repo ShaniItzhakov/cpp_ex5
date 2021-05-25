@@ -31,12 +31,52 @@ TEST_CASE("Test int binary tree") {
     array<int, 10> expected_preorder_arr{10, 12, 3, 4, 6, 7, 5, 11, 2, 8};
     array<int, 10> expected_inorder_arr{3, 12, 6, 4, 7, 10, 11, 5, 2, 8};
     array<int, 10> expected_postorder_arr{3, 6, 7, 4, 12, 11, 8, 2, 5, 10};
+    
     unsigned long i = 0;
-    for (auto it=tree_of_ints.begin_preorder(); it!=tree_of_ints.end_preorder(); ++it) { // never go inside the loop
-        CHECK((*(++it)) ==  expected_preorder_arr.at(i++)); // added ++ before iterator to maniully add,
-        // can check manually with begin_preorder function and check equal for 10,
-        // then use end_preorder function to check it points to 12 after incrememnt to the pointer it
-        
+    auto it = tree_of_ints.begin_preorder();
+    CHECK((*(++it)) ==  expected_preorder_arr.at(i++)); // check 10
+    CHECK((*(++it)) ==  expected_preorder_arr.at(i++)); // check 12
+    CHECK((*(++it)) ==  expected_preorder_arr.at(i++)); // check 3
+    CHECK((*(++it)) ==  expected_preorder_arr.at(i++)); // check 4
+    CHECK((*(++it)) ==  expected_preorder_arr.at(i++)); // check 6
+    CHECK((*(++it)) ==  expected_preorder_arr.at(i++)); // check 7
+    CHECK((*(++it)) ==  expected_preorder_arr.at(i++)); // check 5
+    CHECK((*(++it)) ==  expected_preorder_arr.at(i++)); // check 11
+    CHECK((*(++it)) ==  expected_preorder_arr.at(i++)); // check 2
+    CHECK((*(++it)) ==  expected_preorder_arr.at(i)); // check 8
+    it = tree_of_ints.end_preorder();
+
+    i = 0;
+    auto it1 = tree_of_ints.begin_inorder();
+    CHECK((*(++it1)) ==  expected_inorder_arr.at(i++)); // check 3
+    CHECK((*(++it1)) ==  expected_inorder_arr.at(i++)); // check 12
+    CHECK((*(++it1)) ==  expected_inorder_arr.at(i++)); // check 6
+    CHECK((*(++it1)) ==  expected_inorder_arr.at(i++)); // check 4
+    CHECK((*(++it1)) ==  expected_inorder_arr.at(i++)); // check 7
+    CHECK((*(++it1)) ==  expected_inorder_arr.at(i++)); // check 10
+    CHECK((*(++it1)) ==  expected_inorder_arr.at(i++)); // check 11
+    CHECK((*(++it1)) ==  expected_inorder_arr.at(i++)); // check 5
+    CHECK((*(++it1)) ==  expected_inorder_arr.at(i++)); // check 2
+    CHECK((*(++it1)) ==  expected_inorder_arr.at(i)); // check 8
+    it1 = tree_of_ints.end_inorder(); 
+
+    i = 0;
+    auto it2 = tree_of_ints.begin_postorder();
+    CHECK((*(++it2)) ==  expected_postorder_arr.at(i++)); // check 3
+    CHECK((*(++it2)) ==  expected_postorder_arr.at(i++)); // check 6
+    CHECK((*(++it2)) ==  expected_postorder_arr.at(i++)); // check 7
+    CHECK((*(++it2)) ==  expected_postorder_arr.at(i++)); // check 4
+    CHECK((*(++it2)) ==  expected_postorder_arr.at(i++)); // check 12
+    CHECK((*(++it2)) ==  expected_postorder_arr.at(i++)); // check 11
+    CHECK((*(++it2)) ==  expected_postorder_arr.at(i++)); // check 8
+    CHECK((*(++it2)) ==  expected_postorder_arr.at(i++)); // check 2
+    CHECK((*(++it2)) ==  expected_postorder_arr.at(i++)); // check 5
+    CHECK((*(++it2)) ==  expected_postorder_arr.at(i)); // check 10
+    it2 = tree_of_ints.end_postorder();    
+    
+    i = 0;
+    for (auto it=tree_of_ints.begin_preorder(); it!=tree_of_ints.end_preorder(); ++it) {
+        CHECK((*(++it)) ==  expected_preorder_arr.at(i++));     
     }  // checks: 10 12 3 4 6 7 5 11 2 8
     i = 0;
     for (auto it=tree_of_ints.begin_inorder(); it!=tree_of_ints.end_inorder(); ++it) {
@@ -100,25 +140,24 @@ TEST_CASE("Test string binary tree") {
     } // checks: 1 1 1 1 1 1 1 1 1 1
 }
 
-TEST_CASE("Test object binary tree") {
+TEST_CASE("Test object binary tree") {    
     struct Pet{
         string type;
-        int chip_number;
-        Pet(string type, int chip_number) : type(type), chip_number(chip_number) {}
+        Pet(string type) : type(type) {}
     };
-
+    
     BinaryTree<Pet> tree_of_pets;
-    Pet pet1("dog", 111);
-    Pet pet2("cat", 222);
-    Pet pet3("horse", 333);
+    Pet pet1("dog");
+    Pet pet2("cat");
+    Pet pet3("horse");
     CHECK_THROWS(tree_of_pets.add_right(pet1, pet2)); // no root - should throw exepction
     CHECK_THROWS(tree_of_pets.add_left(pet2, pet1)); //  no root - should throw exepction
     // Build tree
     CHECK_NOTHROW(tree_of_pets.add_root(pet1));
     CHECK_NOTHROW(tree_of_pets.add_right(pet1, pet2));
     CHECK_NOTHROW(tree_of_pets.add_left(pet1, pet3));
-    CHECK_THROWS(tree_of_pets.add_right(pet3, Pet("mouse", 444))); // no root pet3 - should throw exepction
-    CHECK_THROWS(tree_of_pets.add_left(pet3, Pet("bird", 555))); // no root pet3 - should throw exepction
+    CHECK_NOTHROW(tree_of_pets.add_right(pet3, Pet("mouse")));
+    CHECK_NOTHROW(tree_of_pets.add_left(pet3, Pet("bird")));
 
     cout << tree_of_pets << endl; // Print tree
     /* should print:
