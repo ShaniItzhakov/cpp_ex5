@@ -159,7 +159,7 @@ TEST_CASE("Test object binary tree") {
     CHECK_NOTHROW(tree_of_pets.add_right(pet3, Pet("mouse")));
     CHECK_NOTHROW(tree_of_pets.add_left(pet3, Pet("bird")));
 
-    cout << tree_of_pets << endl; // Print tree
+   // cout << tree_of_pets << endl; // Print tree
     /* should print:
            dog
             |
